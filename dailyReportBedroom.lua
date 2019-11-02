@@ -1,9 +1,10 @@
 commandArray = {}
 time = os.date("*t")
+timestamp = os.date("%A %d %b, %X")
 
-function tointeger( x )
+function onedecimal( x )
     num = tonumber( x )
-    return num < 0 and math.ceil( num ) or math.floor( num )
+    return math.ceil(x*10)*0.1
 end
 
 function sendEmail( title, body )
@@ -11,20 +12,19 @@ function sendEmail( title, body )
 end
 
 if time.hour == 8 and time.min == 0 then
-    print ('dailyReport');
     -- send mail
     commandArray['SendEmail'] = sendEmail(
-        "[Dz] Bedroom 1 "..
-        tointeger(uservariables['minTempNight'])..
+        "[Dz] Bedroom "..
+        onedecimal(uservariables['minNightlyTemp'])..
         "°C à "..
-        tointeger(uservariables['maxTempNight'])..
-        "°C", "dailyReport")
+        onedecimal(uservariables['maxNightlyTemp'])..
+        "°C", timestamp)
 end
 
 -- Reinit night temperature at 12:00
 if time.hour == 12 and time.min == 0 then
-    commandArray['Variable:minTempNight'] = '100'
-    commandArray['Variable:maxTempNight'] = '0'
+    commandArray['Variable:minNightlyTemp'] = '100'
+    commandArray['Variable:maxNightlyTemp'] = '0'
 end
 
 return commandArray

@@ -6,8 +6,6 @@ function sendEmail( title, body )
 end
 
 if (time.hour == 8 and time.min == 0) then
-    print ('dailyReport');
-    -- loop through all the devices
     for deviceName,deviceValue in pairs(otherdevices) do
         -- Anthurium_Humidity
         if (deviceName == 'Anthurium') then
@@ -16,7 +14,8 @@ if (time.hour == 8 and time.min == 0) then
                 -- send mail
                 commandArray['SendEmail'] = sendEmail(
                     "[Dz] Anthurium "..AnthuriumTemperature.."%",
-                    "Hello, you should watering your Anthurium.\n"
+                    "Bonjour, Il faudrait arroser l'Anthurium car son taux "
+                    .."d'humidité est inférieur à 75%.\n"
                     .."https://jardinage.ooreka.fr/plante/voir/89/anthurium")
             end
         end

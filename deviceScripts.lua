@@ -1,11 +1,7 @@
 commandArray = {}
 time = os.date("*t")
 weekday = os.date("%A")
-
-function tointeger( x )
-    num = tonumber( x )
-    return num < 0 and math.ceil( num ) or math.floor( num )
-end
+timestamp = os.date("%A %d %b, %X")
 
 function sendEmail( title, body )
     return title..'#'..body..'#'..uservariables['email']
@@ -13,8 +9,8 @@ end
 
 -- loop through all the changed devices
 for deviceName,deviceValue in pairs(devicechanged) do
-    -- Front door
-    if (deviceName == "Front door"
+    -- Porte d'entrée
+    if (deviceName == "Porte d'entrée"
         and deviceValue == 'On'
         and weekday ~= 'Saturday'
         and weekday ~= 'Sunday'
@@ -22,35 +18,35 @@ for deviceName,deviceValue in pairs(devicechanged) do
         and time.hour < 18) then
         -- send mail
         commandArray['SendEmail'] = sendEmail(
-            "[Dz] Front door open",
-            "auto reporting")
+            "[Dz] Ouverture porte d'entrée",
+            timestamp)
     end
-    -- Front door [Holidays mode]
-    if (deviceName == "Front door"
+    -- Porte d'entrée [MODE VACANCES]
+    if (deviceName == "Porte d'entrée"
         and deviceValue == 'On'
         and uservariables['modeHolidays'] == 'On') then
         -- send mail
         commandArray['SendEmail'] = sendEmail(
-            "[Dz] Front door open",
-            "auto reporting - Holidays mode")
+            "[Dz] Ouverture porte d'entrée",
+            timestamp.." - Mode Vacances")
     end
-    -- Holidays mode
-    if (deviceName == "Holidays mode (D)") then
+    -- Mode Vacances
+    if (deviceName == "Mode vacances (D)") then
         -- set user var
         uservariables['modeHolidays'] = deviceValue
         -- send mail
         commandArray['SendEmail'] = sendEmail(
-            "[Dz] Holidays mode "..deviceValue,
-            "auto reporting")
+            "[Dz] Mode Vacances "..deviceValue,
+            timestamp)
     end
     -- Update night temperature
-    if (deviceName == "Bedroom 1_Temperature"
+    if (deviceName == "Chambre Bedroom_Temperature"
         and timeofday['Nighttime']) then
-        if (deviceValue < tonumber(uservariables['minTempNight'])) then
-            commandArray['Variable:minTempNight'] = tostring(deviceValue)
+        if (deviceValue < tonumber(uservariables['minNightlyTemp'])) then
+            commandArray['Variable:minNightlyTemp'] = tostring(deviceValue)
         end
-        if (deviceValue > tonumber(uservariables['maxTempNight'])) then
-            commandArray['Variable:maxTempNight'] = tostring(deviceValue)
+        if (deviceValue > tonumber(uservariables['maxNightlyTemp'])) then
+            commandArray['Variable:maxNightlyTemp'] = tostring(deviceValue)
         end
     end
 end
