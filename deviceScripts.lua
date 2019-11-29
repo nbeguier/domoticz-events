@@ -33,7 +33,7 @@ for deviceName,deviceValue in pairs(devicechanged) do
     -- Mode Vacances
     if (deviceName == "Mode vacances (D)") then
         -- set user var
-        uservariables['modeHolidays'] = deviceValue
+        commandArray['Variable:modeHolidays'] = deviceValue
         -- send mail
         commandArray['SendEmail'] = sendEmail(
             "[Dz] Mode Vacances "..deviceValue,
